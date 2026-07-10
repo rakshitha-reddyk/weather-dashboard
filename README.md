@@ -59,3 +59,4 @@ Returns:
 - Responsive UI
 - Invalid city error message
 - Loading icon
+- Toggle between Light Mode and Dark Mode
