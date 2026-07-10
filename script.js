@@ -1,4 +1,4 @@
-// Map WMO weather codes to weather icons
+// Map weather codes to weather icons
 function getWeatherIcon(code) {
   const icons = {
     0: "☀️",
@@ -26,7 +26,7 @@ function getWeatherIcon(code) {
   return icons[code] || "⛅";
 }
 
-// Convert WMO weather codes into readable weather descriptions
+// Make weather codes into readable weather descriptions
 function getWeatherDescription(code) {
   const description = {
     0: "Clear sky",
@@ -58,7 +58,7 @@ function getWeatherDescription(code) {
 const GEOCODING_API = "https://geocoding-api.open-meteo.com/v1/search";
 const WEATHER_API = "https://api.open-meteo.com/v1/forecast";
 
-// Find the latitude and longitude of the searched city
+// Find the latitude and longitude of the given city
 async function getCoordinates(city) {
   const response = await fetch(
     `${GEOCODING_API}?name=${encodeURIComponent(city)}&count=1&language=en&format=json`,
@@ -66,7 +66,7 @@ async function getCoordinates(city) {
 
   const geocodingData = await response.json();
 
-  // Stop execution if the city cannot be found
+  // Stop execution if the city is not found
   if (!geocodingData.results || geocodingData.results.length === 0) {
     throw new Error("City not found");
   }
@@ -79,7 +79,7 @@ async function getCoordinates(city) {
   };
 }
 
-// Retrieve current, hourly, and daily weather data
+// Fetch current, hourly, and daily weather data
 async function getWeather(lat, lon) {
   const response = await fetch(
     `${WEATHER_API}?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,pressure_msl&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`,
@@ -125,13 +125,13 @@ function updateCurrentWeather(location, weather) {
     `${Math.round(currentWeather.pressure_msl)} hPa`;
 }
 
-// Generate hourly forecast cards dynamically
+// Dynamically generate hourly forecast cards
 function updateHourlyForecast(weather) {
   const hourly = weather.hourly;
   const container = document.getElementById("hourlyForecast");
   container.innerHTML = "";
 
-  // Display the next 24 hours
+  //Show the next 24 hours
   for (let i = 0; i < 24; i++) {
     const time = new Date(hourly.time[i]);
     const hourlyCard = document.createElement("div");
@@ -151,7 +151,7 @@ function updateDailyForecast(weather) {
   const container = document.getElementById("dailyForecast");
   container.innerHTML = "";
 
-  // Display the next 7 days
+  // show the next 7 days
   for (let i = 0; i < 7; i++) {
     const data = new Date(daily.time[i]);
     const dayName = data.toLocaleDateString("en-US", {
@@ -197,21 +197,21 @@ async function searchWeather() {
   }
 }
 
-// Display the loading state while the API request is in progress
+// Show the loading state while the API request is in progress
 function showLoading() {
   document.getElementById("loading").style.display = "block";
   document.getElementById("weatherContent").style.display = "none";
   document.getElementById("errorMsg").style.display = "none";
 }
 
-// Display the weather dashboard after successful data retrieval
+// Show the weather dashboard after successful data retrieval
 function showContent() {
   document.getElementById("loading").style.display = "none";
   document.getElementById("weatherContent").style.display = "block";
   document.getElementById("errorMsg").style.display = "none";
 }
 
-// Display an error message if the request fails
+// Show an error message if the request fails
 function showError(message) {
   document.getElementById("loading").style.display = "none";
   document.getElementById("weatherContent").style.display = "none";
